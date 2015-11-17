@@ -15,24 +15,6 @@ Welcome to
 //alert("welcome!");
 {% endblock%}
 
-{# Comments here #}
-
-
-{% block jumbotron2 %}
-  <div class="container">
-
-			<!-- Main component for a primary marketing message or call to action -->
-			<div class="jumbotron">
-			<h1> Hello {{ username_is }}</h1>
-			<p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-			<p>To see the difference between static and fixed top navbars, just scroll.</p>
-			<p>
-			<a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-			</p>
-			</div>
-  </div>
-{% endblock %}
-
 
 {# This block is for the slider or carousel #}
 {% block jumbotron %}
@@ -80,48 +62,31 @@ Welcome to
 {% endif %}
 {% endblock %}
 
-
+{# This block is for showing the products #}
 {% block content %}
 <div class='row'>
 {% for product in products %}
-    <div class='col-sm-4'>
+    <div class='col-sm-3'>
         <div class="thumbnail">
-
+            {# Get product image #}
             {% if product.productimage_set.all %}
-
-
-
                 {% for item in product.productimage_set.all %}
-
-
                     {% if item.featured %}
-
                         <div style="
 							width:200px;
 							height:200px;margin:0 auto;">
-
-
                             <a href='{{ product.get_absolute_url }}'>
-
                                 <div class='background_img_thumb' style="height:200px;background-image: url('{{ MEDIA_URL }}{{ item.image }}');"></div>
-
                             </a>
-
                         </div>
-
                         <!-- <img class='img-responsive' src="{{ MEDIA_URL }}{{ item.image }}" /> -->
-
                     {% endif %}
-							 
-
-
-
                 {% endfor %}
-
-
             {% else %}
+                {# There is not image for the product, use the image of placeholder #}
                 <img class='img-responsive' src='{% static "img/placeholder.svg" %}' />
             {% endif %}
+            {# Get product caption and product description #}
             <div class="caption">
                 <a href='{{ product.get_absolute_url }}'> <h3>{{ product.title }}</h3></a>
                 <p>{{ product.description|truncatewords:15}}</p>
@@ -129,7 +94,6 @@ Welcome to
             </div>
         </div>
     </div>
-{% cycle "" "" "</div><br/><hr/><div class='row'>" %}
 {% endfor %}
 </div>
 

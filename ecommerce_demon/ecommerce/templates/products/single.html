@@ -1,3 +1,4 @@
+{# This page is for the description of single product. #}
 {% extends 'base.html' %}
 
 <div class="page-header">
@@ -5,76 +6,81 @@
 </div>
 
 {% block content %}
-
-
 <div class='row'>
+
+    {# This column-4 is for showing the image of the product #}
 	<div class='col-sm-4'>
-	{% for img in images %}
+        {# This for loop is for showing the featured images #}
+        {% for img in images %}
+            {% if img.featured %}
+                <div class="col-xs-12">
+                    <img class='img-responsive' src="{{ MEDIA_URL }}{{ img.image }}" />
+                    <hr/>
+                </div>
+            {% endif %}
+        {% endfor %}
 
-		{% if img.featured %}
-		<div class="col-xs-12">
-			<img class='img-responsive' src="{{ MEDIA_URL }}{{ img.image }}" />
-		<hr/>
-		</div>
-		{% endif %}
-			{% endfor %}
-	{% for img in images %}
-		{% if not img.featured %}
-		<div class="col-xs-6">
-	    <a href="#" class="thumbnail">
-	      <img class='img-responsive' src="{{ MEDIA_URL }}{{ img.image }}">
-	    </a>
-	  	</div>
+        <hr>
 
-		{% endif %}
-								 
-	{% endfor %}
+        {# This for loop is for showing the not featured images #}
+        {% for img in images %}
+            {% if not img.featured %}
+                <div class="col-xs-6">
+                    <a href="#" class="thumbnail">
+                        <img class='img-responsive' src="{{ MEDIA_URL }}{{ img.image }}">
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
 	</div>
+
+    {# This column-8 is for showing the text description of the product #}
 	<div class='col-sm-8'>
+        {# Showing the product title #}
 		<div class='col-sm-8 pull-left'>
 			 <h1>{{ product.title }} 
 			 </h1>
 		 </div>
-		 <div class='col-sm-4 pull-right'>
-			 	 <form class='form' method='POST' action='{% url "add_to_cart" product.slug %}'> {% csrf_token %}
-			 	 <input class='btn btn-default btn-block' type='submit' value='Add to cart'/>
-			 	<input  class="form-control"  name='qty' type='number' value='1'/>
-			 	
-			 	{% if product.variation_set.all %}
 
+        {# This part is the "Add to cart" part #}
+        <div class='col-sm-4 pull-right'>
+            <form class='form' method='POST' action='{% url "add_to_cart" product.slug %}'> {% csrf_token %}
+                <input class='btn btn-default btn-block' type='submit' value='Add to cart'/>
+                <input  class="form-control"  name='qty' type='number' value='1'/>
+                {# If the product provide the options for the customers, customers can choose the options #}
+                {% if product.variation_set.all %}
+                    {# If the product provide the options for the size of product #}
+                    {% if product.variation_set.sizes %}
+                        <select class='form-control' name='size'>
+                            {% for item in product.variation_set.sizes %}
+                                <option value='{{ item.title|lower }}'>{{ item.title|capfirst }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                    {# If the product provide the options for the color of product #}
+                    {% if product.variation_set.colors %}
+                        <select class='form-control' name='color'>
+                            {% for item in product.variation_set.colors %}
+                                <option value='{{ item.title|lower }}'>{{ item.title|capfirst }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                {% endif %}
+            </form>
+        </div>
 
-			 	{% if product.variation_set.sizes %}
-			 	<select class='form-control' name='size'>
-			 	{% for item in product.variation_set.sizes %}
-			 		<option value='{{ item.title|lower }}'>{{ item.title|capfirst }}</option>
-			 		{% endfor %}
-			 	</select>
-			 	{% endif %}
-
-			 	 {% if product.variation_set.colors %}
-			 	<select class='form-control' name='color'>
-			 	{% for item in product.variation_set.colors %}
-			 		<option value='{{ item.title|lower }}'>{{ item.title|capfirst }}</option>
-			 		{% endfor %}
-			 	</select>
-			 	{% endif %}
-
-
-
-			 	{% endif %}
-
-			 </form>
-	 	</div>
+        {# This is for showing the price and shipping fee #}
 	 	<div class='col-sm-12'>
-			 <hr/>
-
-			 Price: {{ product.price }} <br/>
-			 Shipping: Free with $25+ purchase.
-			 <hr/>
+            <hr/>
+            <h5>Price: {{ product.price }}</h5>
+            <h5>Shipping: Free with $25+ purchase.</h5>
+            <hr/>
 	 	</div>
-			 <div class='col-sm-12'>
-			{{ product.description|linebreaks }}
-				</div>
+
+        {# This is for showing the product description #}
+        <div class='col-sm-12'>
+            {{ product.description|linebreaks }}
+        </div>
 	</div>
 </div>
 

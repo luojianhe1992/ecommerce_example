@@ -26,8 +26,7 @@ class Product(models.Model):
 	description = models.TextField(null=True, blank=True)
 	category = models.ManyToManyField(Category, null=True, blank=True)
 	price = models.DecimalField(decimal_places=2, max_digits=100, default=29.99)
-	sale_price = models.DecimalField(decimal_places=2, max_digits=100,\
-												null=True, blank=True)
+	sale_price = models.DecimalField(decimal_places=2, max_digits=100, null=True, blank=True)
 	slug = models.SlugField(unique=True)
 	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 	updated = models.DateTimeField(auto_now_add=False, auto_now=True)
@@ -57,8 +56,6 @@ class ProductImage(models.Model):
 
 	def __unicode__(self):
 		return self.product.title
-
-
 
 
 class VariationManager(models.Manager):

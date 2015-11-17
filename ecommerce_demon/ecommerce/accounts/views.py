@@ -37,10 +37,18 @@ def login_view(request):
 
 
 def registration_view(request):
+
+	print("in the function of registration_view.")
+
 	form = RegistrationForm(request.POST or None)
 	btn = "Join"
 	if form.is_valid():
 		new_user = form.save(commit=False)
+
+		print("********print out new_user********")
+		print(new_user)
+		print("**********************************")
+
 		# new_user.first_name = "Justin" this is where you can do stuff with the model form
 		new_user.save()
 		messages.success(request, "Successfully Registered. Please confirm your email now.")
